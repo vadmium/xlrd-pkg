@@ -3,32 +3,41 @@
 # Contributor: Piotr Beling <qwak@stud.ics.p.lodz.pl>
 # Contributor: Douglas Soares de Andrade <dsandrade@gmail.com>
 
-pkgname=python2-xlrd
-pkgver=0.7.9
+_proj=xlrd
+pkgname="python3-$_proj"
+_acc=takluyver
+_rev=7e8b71a
+# Commit count: git rev-list --count 5ee3e13.."$_rev", where revision 5ee3e13
+# introduced version 0.8.0a
+pkgver="0.8.0a+30+g${_rev}"
 pkgrel=1
 pkgdesc="A library for developers to use to extract data from Microsoft Excel (tm) spreadsheet files."
-url="http://www.lexicon.net/sjmachin/xlrd.htm"
-depends=('python2')
-conflicts=("python-xlrd")
-provides=("python-xlrd")
-source=("http://pypi.python.org/packages/source/x/xlrd/xlrd-$pkgver.tar.gz")
-md5sums=('8e6833676d78ef65515481952eb0fd76')
+url="https://github.com/python-excel/$_proj/pull/2"
+makedepends=('python3')
+provides=("python-$_proj")
+source=("https://github.com/$_acc/$_proj/tarball/$_rev")
+md5sums=('c5dd70ca2175ac76f7d723cc1cfee8f7')
 arch=('any')
 license=('BSD')
 
+_tardir="$_acc-$_proj-$_rev"
+
 build() {
-  cd "$srcdir/xlrd-$pkgver"
-  python2 setup.py install --root="$pkgdir"
-  sed -i '1i\#!/usr/bin/env python2' "$pkgdir/usr/bin/runxlrd.py"
+  cd "$srcdir/$_tardir"
+  python3 setup.py install --root="$pkgdir"
 }
 
 package() {
-  cd "$srcdir/xlrd-$pkgver"
+  cd "$srcdir/$_tardir"
   local docdir
   docdir="$pkgdir/usr/share/doc/$pkgname/"
   install -D -m644 "xlrd/licences.py" \
     "$pkgdir/usr/share/licenses/$pkgname/licences.py"
-  chmod 755 "$pkgdir/usr/bin/runxlrd.py"
+  
+  # This script is not ported to Python 3 and would conflict with the version
+  # provided in the Python 2 package anyway
+  rm "$pkgdir/usr/bin/runxlrd.py"
+  
   mkdir -p "$docdir"
   cp -a xlrd/doc/* "$docdir"
 }
