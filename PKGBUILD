@@ -3,31 +3,23 @@
 # Contributor: Piotr Beling <qwak@stud.ics.p.lodz.pl>
 # Contributor: Douglas Soares de Andrade <dsandrade@gmail.com>
 
-_proj=xlrd
-pkgname="python3-$_proj"
-_acc=takluyver
+pkgname=python3-xlrd
 _rev=f5846f7
 # Commit count: git rev-list --count <tag>.."$_rev"
 pkgver="0.8.0+22+g${_rev}"
 pkgrel=1
 pkgdesc="A library for developers to use to extract data from Microsoft Excel (tm) spreadsheet files."
-url="https://github.com/python-excel/$_proj/pull/2"
+url="https://github.com/python-excel/xlrd/pull/2"
 makedepends=('python3')
-provides=("python-$_proj")
-source=("https://github.com/$_acc/$_proj/tarball/$_rev")
+provides=("python-xlrd")
+source=("https://github.com/takluyver/xlrd/tarball/$_rev")
 md5sums=('31b5f64f7f0cfe83cba2a05f33267d8d')
 arch=('any')
 license=('BSD')
 
-_tardir="$_acc-$_proj-$_rev"
-
-build() {
-  cd "$srcdir/$_tardir"
-  python3 setup.py install --root="$pkgdir"
-}
-
 package() {
-  cd "$srcdir/$_tardir"
+  cd "$srcdir/takluyver-xlrd-$_rev"
+  python3 setup.py install --root="$pkgdir"
   local docdir
   docdir="$pkgdir/usr/share/doc/$pkgname/"
   install -D -m644 "xlrd/licences.py" \
